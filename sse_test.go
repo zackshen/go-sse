@@ -1,17 +1,18 @@
 package sse
 
 import (
-	assert "github.com/stretchr/testify/assert"
 	"testing"
+
+	assert "github.com/stretchr/testify/assert"
 )
 
 func TestSse(t *testing.T) {
-	sse := NewSse()
+	sse := NewSSE()
 	assert.Equal(t, sse.String(), "<retry: 2000\n\n>")
 }
 
 func TestAddMessage(t *testing.T) {
-	sse := NewSse()
+	sse := NewSSE()
 	sse.AddMessage("ack", "ACK")
 	sse.AddMessage("message", "Hello World")
 	sse.AddMessage("eof", "FIN")
@@ -19,7 +20,7 @@ func TestAddMessage(t *testing.T) {
 }
 
 func TestSetEventId(t *testing.T) {
-	sse := NewSse()
+	sse := NewSSE()
 	sse.SetEventId("listen-event")
 	assert.Equal(t, sse.String(), "<retry: 2000\n\nid: listen-event\n\n>")
 
@@ -29,7 +30,7 @@ func TestSetEventId(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-	sse := NewSse()
+	sse := NewSSE()
 	sse.AddMessage("ack", "ACK")
 	sse.AddMessage("message", "Hello World")
 	sse.AddMessage("eof", "FIN")
