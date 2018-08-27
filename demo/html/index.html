@@ -1,28 +1,36 @@
 <html>
     <head>
-
-        <script type="text/javascript">
-            var es = new EventSource("/sse?sid=123")
-            console.log(es.readyState)
-            es.onmessage = function(e) {
-                console.log(e)
+        <style>
+            body {
+                background: #273238;
+                color: #c5d928;
             }
-            es.onerror = function (e) {
-                var msg ;
-                switch( e.target.readyState ){
-                case EventSource.CONNECTING:
-                    msg = 'Reconnecting…';
-                    break;
-                case EventSource.CLOSED:
-                    msg = 'Connection closed';
-                    break;
-                }
-                console.log(msg)
-            }
-        </script>
+        </style>
     </head>
     <body>
-
+        <div id="app">Waiting...</div>
     </body>
-
+    <script type="text/javascript">
+        var es = new EventSource("/sse")
+        var app = document.getElementById('app')
+        es.onmessage = function(e) {
+            var lines = e.data.split('\n')
+            for (var i=0; i < lines.length; i++) {
+                lines[i] = "<div class=''>" + lines[i] + '</div>'
+            }
+            app.innerHTML = lines.join('')
+        }
+        es.onerror = function (e) {
+            var msg;
+            switch(e.target.readyState) {
+            case EventSource.CONNECTING:
+                msg = 'Reconnecting ...';
+                break;
+            case EventSource.CLOSED:
+                msg = 'Connection closed';
+                break;
+            }
+            app.innerHTML = msg;
+        }
+    </script>
 </html>

@@ -2,6 +2,7 @@ package sse
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -116,6 +117,7 @@ func (s *SSEHandler) HttpHandler(response http.ResponseWriter, request *http.Req
 }
 
 func (s *SSEHandler) Broadcast(msg string) {
+	log.Println("broadcast new message")
 	for conn := range s.connections {
 		s.sse.AddMessage("test", msg)
 		conn <- s.sse.String()
@@ -123,10 +125,12 @@ func (s *SSEHandler) Broadcast(msg string) {
 }
 
 func (s *SSEHandler) RemoveConnection(conn Connection) {
+	log.Println("remove connection")
 	delete(s.connections, conn)
 }
 
 func (s *SSEHandler) AddConnection(conn Connection) {
+	log.Println("new connection")
 	s.connections[conn] = true
 }
 
